@@ -36,6 +36,12 @@
     }
   }
 
+  &__error-message {
+    font-size: .7rem;
+    color: rgba(238, 36, 85, 0.8);
+    padding: 4px 0;
+  }
+
   &__button {
     -webkit-appearance: none;
     display: inline-flex;

@@ -6,28 +6,29 @@ export default class App extends Component {
     prefix: "",
     number: "",
     result: "",
-    loading: false
+    loading: false,
+    errors: false
   };
 
   ref0 = null;
   ref1 = null;
 
   validate = () => {
-    let errors = false;
+    this.setState({ errors: false })
     for (let i = 0; i < 2; i++) {
       if (!this[`ref${i}`].value || isNaN(this[`ref${i}`].value)) {
         this[`ref${i}`].classList.add("fc__input--error");
-        errors = true;
+        this.setState({ errors: true })
       }
     }
 
-    if (!errors) this.makeFetch();
+    if (!this.state.errors) this.makeFetch();
   };
 
   makeFetch = () => {
     this.setState({ result: "", loading: true });
     fetch(
-      `https://cargo-tracker-268309.appspot.com/track?prefix=${
+      `https://api.cargo-tracker.ru/track?prefix=${
         this.state.prefix
       }&number=${this.state.number}`
     )
@@ -45,15 +46,17 @@ export default class App extends Component {
 
   setPrefix = e => {
     e.target.classList.remove("fc__input--error");
+    this.setState({ errors: false })
     this.setState({ prefix: e.target.value });
   };
 
   setNumber = e => {
     e.target.classList.remove("fc__input--error");
+    this.setState({ errors: false })
     this.setState({ number: e.target.value });
   };
 
-  render(props, { prefix, number, result, loading }) {
+  render(props, { prefix, number, result, loading, errors }) {
     return (
       <div class="fc">
         <input
@@ -73,6 +76,11 @@ export default class App extends Component {
         <button class="fc__button" onClick={this.validate}>
           Проверить
         </button>
+        {errors && 
+        <div class="fc__error-message">
+          Поля числовые и обязательные
+        </div>
+  }
         <div class="fc__results">
           {loading && <div class="fc__loader" />}
           <div
